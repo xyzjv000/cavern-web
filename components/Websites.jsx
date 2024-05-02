@@ -1,7 +1,17 @@
+"use client";
 import React from "react";
 import Icon from "@mdi/react";
 import * as mdiIcons from "@mdi/js";
+import Collapse from "@mui/material/Collapse";
+import IconButton from "@mui/material/IconButton";
+import ExpandMoreOutlinedIcon from "@mui/icons-material/ExpandMoreOutlined";
+import ExpandLessOutlinedIcon from "@mui/icons-material/ExpandLessOutlined";
+
+// Components
+import Accounts from "@/components/Accounts";
+
 const Websites = ({ icon, name, count, length, index }) => {
+  const [openAccount, setOpenAccount] = React.useState(false);
   function convertIconNameToCamelCase(name) {
     return (
       "mdi" +
@@ -14,20 +24,39 @@ const Websites = ({ icon, name, count, length, index }) => {
   // convert name to mdi react format
   const camelCaseIconName = convertIconNameToCamelCase(icon);
 
+  const toggleAccountList = () => {
+    setOpenAccount(!openAccount);
+  };
   return (
-    <div
-      className={`${
-        index != length - 1 ? "border-b-2" : ""
-      } py-4 px-6 flex justify-between items-center`}
-    >
-      <div className="flex flex-row gap-4 justify-center items-center">
-        <Icon path={mdiIcons[camelCaseIconName]} size={2} color="#555555" />
-        <p className="text-2xl font-semibold text-[#555555]">{name}</p>
+    <div className="cursor-pointer" onClick={toggleAccountList}>
+      <div
+        className={`${
+          index != length - 1 ? "border-b-2" : ""
+        } py-4 px-2 sm:px-6 flex justify-between items-center`}
+      >
+        <div className="flex flex-row gap-2 sm:gap-4 justify-center items-center">
+          <Icon path={mdiIcons[camelCaseIconName]} size={1.5} color="#555555" />
+          <p className="text-xl sm:text-2xl font-semibold text-[#555555]">
+            {name}
+          </p>
+        </div>
+        <div className="flex  justify-center items-center">
+          <div className="flex flex-col justify-center items-center">
+            <p className="font-extrabold text-3xl text-primary">{count}</p>
+            <p className="font-bold text-sm text-gray-500">Accounts</p>
+          </div>
+          <IconButton aria-label="button" onClick={toggleAccountList}>
+            {openAccount ? (
+              <ExpandLessOutlinedIcon />
+            ) : (
+              <ExpandMoreOutlinedIcon />
+            )}
+          </IconButton>
+        </div>
       </div>
-      <div className="flex flex-col justify-center items-center">
-        <p className="font-extrabold text-3xl text-primary">{count}</p>
-        <p className="font-bold text-sm text-gray-500">Accounts</p>
-      </div>
+      <Collapse in={openAccount} timeout="auto">
+        <Accounts />
+      </Collapse>
     </div>
   );
 };
