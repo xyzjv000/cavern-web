@@ -20,7 +20,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={poppins.className} style={poppins.style}>
+      <body className={`!${poppins.className}`} style={poppins.style}>
         <main className="flex min-h-screen flex-col items-center justify-between background-image">
           {children}
         </main>

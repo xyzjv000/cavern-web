@@ -1,16 +1,19 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
 @layer utilities {
   .text-balance {
     text-wrap: balance;
   }
 }
 
+:root {
+  --font-poppins: 'Poppins', sans-serif;
+}
 
 .background-image {
   background: url("../public/Image/bg.png");
   background-size: 100%;
   background-repeat: no-repeat;
 }
+

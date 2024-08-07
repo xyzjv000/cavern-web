@@ -10,8 +10,13 @@ import ExpandLessOutlinedIcon from "@mui/icons-material/ExpandLessOutlined";
 // Components
 import Accounts from "@/components/Accounts";
 
-const Websites = ({ icon, name, count, length, index }) => {
+const Websites = ({ icon, name, count, length, index, data }) => {
+  React.useEffect(() => {
+    setAccounts(data);    
+  }, [data]);
+
   const [openAccount, setOpenAccount] = React.useState(false);
+  const [accounts, setAccounts] = React.useState(data);
   function convertIconNameToCamelCase(name) {
     return (
       "mdi" +
@@ -26,9 +31,11 @@ const Websites = ({ icon, name, count, length, index }) => {
 
   const toggleAccountList = () => {
     setOpenAccount(!openAccount);
+    console.log(length);
+    
   };
   return (
-    <div className="cursor-pointer" onClick={toggleAccountList}>
+    <div className="cursor-pointer">
       <div
         className={`${
           index != length - 1 ? "border-b-2" : ""
@@ -55,7 +62,9 @@ const Websites = ({ icon, name, count, length, index }) => {
         </div>
       </div>
       <Collapse in={openAccount} timeout="auto">
-        <Accounts />
+        {accounts.map((account, index) => {
+          return <Accounts account={account} key={`account-info-${index}`} name={name} />
+        })}
       </Collapse>
     </div>
   );
