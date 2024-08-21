@@ -14,11 +14,11 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import MenuIcon from "@mui/icons-material/Menu";
 import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
 import LanguageOutlinedIcon from "@mui/icons-material/LanguageOutlined";
 import HttpsOutlinedIcon from "@mui/icons-material/HttpsOutlined";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
+import { useSession, signOut } from 'next-auth/react';
 
 // Componenets
 import Searchbar from "@/components/Searchbar";
@@ -26,15 +26,27 @@ import ProfileCard from "@/components/ProfileCard";
 const drawerWidth = 300;
 
 function NavigationDrawer(props) {
+  const { data: session } = useSession();
   const { window } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [isClosing, setIsClosing] = React.useState(false);
-  const icons = [
-    <LanguageOutlinedIcon />,
-    <HttpsOutlinedIcon />,
-    <AccountCircleOutlinedIcon />,
-    <LogoutOutlinedIcon />,
-  ];
+  const navigations = [
+    {
+      title : "Websites",
+      icon : <LanguageOutlinedIcon />,
+      action : () => console.log("Websites")
+    },
+    {
+      title : "Profile",
+      icon : <AccountCircleOutlinedIcon />,
+      action : () => console.log("Profile")
+    },
+    {
+      title : "Logout",
+      icon : <LogoutOutlinedIcon />,
+      action : () => signOut()
+    }
+  ]
 
   const handleDrawerClose = () => {
     setIsClosing(true);
@@ -61,11 +73,11 @@ function NavigationDrawer(props) {
         <Box p={2}>
           <Searchbar />
         </Box>
-        {["Websites", "Accounts", "Profile", "Logout"].map((text, index) => (
-          <ListItem key={text} disablePadding divider>
-            <ListItemButton>
-              <ListItemIcon>{icons[index]}</ListItemIcon>
-              <ListItemText primary={text} />
+        {navigations.map((navigation, index) => (
+          <ListItem key={navigation.title} disablePadding divider>
+            <ListItemButton onClick={navigation.action}>
+              <ListItemIcon>{navigation.icon}</ListItemIcon>
+              <ListItemText primary={navigation.title} />
             </ListItemButton>
           </ListItem>
         ))}

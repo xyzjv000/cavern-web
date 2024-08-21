@@ -12,22 +12,37 @@ import {
   TextField,
 } from "@mui/material";
 import ContentCopyTwoToneIcon from "@mui/icons-material/ContentCopyTwoTone";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import CryptoJS from "crypto-js";
 
-export default function AccountsDialog({ open, handleClose, data, name }) {
+export default function AccountsDialog({
+  open,
+  handleClose,
+  userData,
+  name,
+  handleChange,
+  copyText,
+}) {
   const [update, setUpdate] = React.useState(false);
-  const [userData, setUserData] = React.useState(data);
-  const handleChange = (e) => {
-    const { name, value } = e.target;
+  const [setshowPassword, setSetshowPassword] = React.useState(false)
 
-    setUserData((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
-  };
   const submit = () => {
     console.log(userData);
+    // save API
     handleClose();
   };
+  const togglePasswordVisibility = () => {
+    setSetshowPassword(!setshowPassword);
+  };
+
+  // const encryptData = async (text) => {
+  //   let ciphertext = CryptoJS.AES.encrypt(
+  //     text,
+  //     process.env.NEXT_PUBLIC_SECRET
+  //   ).toString();
+  //   return ciphertext;
+  // };
   return (
     <Dialog onClose={handleClose} open={open} maxWidth="xs" fullWidth>
       <DialogTitle variant="inherit" className="text-primary text-2xl pt-8">
@@ -44,13 +59,17 @@ export default function AccountsDialog({ open, handleClose, data, name }) {
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
-                <IconButton edge="end" className="mx-0 text-primary">
+                <IconButton
+                  edge="end"
+                  className="mx-0 text-primary"
+                  onClick={() => copyText(userData.username)}
+                >
                   <ContentCopyTwoToneIcon />
                 </IconButton>
               </InputAdornment>
             ),
           }}
-          disabled={update}
+          disabled={!update}
           value={userData.username}
           onChange={handleChange}
         />
@@ -62,21 +81,33 @@ export default function AccountsDialog({ open, handleClose, data, name }) {
           placeholder="Password"
           required
           name="password"
+          type={setshowPassword ? "text" : "password"}
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
-                <IconButton edge="end" className="mx-0 text-primary">
+                <IconButton
+                  edge="end"
+                  className="mx-0 text-primary"
+                  onClick={togglePasswordVisibility}
+                >
+                  {setshowPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                </IconButton>
+                <IconButton
+                  edge="end"
+                  className="mx-0 text-primary"
+                  onClick={() => copyText(userData.password)}
+                >
                   <ContentCopyTwoToneIcon />
                 </IconButton>
               </InputAdornment>
             ),
           }}
-          disabled={update}
+          disabled={!update}
           value={userData.password}
           onChange={handleChange}
         />
         <FormControlLabel
-          control={<Switch onClick={(e) => setUpdate(!e.target.checked)} />}
+          control={<Switch value={update} onClick={(e) => setUpdate(e.target.checked)} />}
           label="Enable update"
         />
       </DialogContent>
