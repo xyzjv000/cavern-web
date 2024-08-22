@@ -1,5 +1,6 @@
 "use client";
 import Card from "@/components/Card";
+import AddButton from "@/components/AddButton";
 import Websites from "@/components/Websites";
 import { Typography } from "@mui/material";
 import React from "react";
@@ -20,6 +21,12 @@ const page = () => {
           throw new Error("Network response was not ok");
         }
         const data = await response.json();
+        if (data.length > 0) {
+          localStorage.setItem("websites", JSON.stringify(data));
+        } else {
+          localStorage.setItem("websites", []);
+        }
+
         setItems(data);
       } catch (error) {
         console.error("Error fetching items:", error);
@@ -29,39 +36,47 @@ const page = () => {
     if (status == "authenticated") {
       fetchItems();
     }
-    if (status === 'unauthenticated') {
-      router.push('/login');
+    if (status === "unauthenticated") {
+      router.push("/login");
     }
-
   }, [status]);
   return (
-    <Card className="bg-white w-full justify-start">
-      <Typography variant="p" className="text-primary font-semibold">
-        Your saved passwords
-      </Typography>
-      {items.map((item, index) => {
-        return (
-          <Websites
-            icon={item.icon}
-            name={item.siteName}
-            count={item.accounts.length}
-            length={items.length}
-            index={index}
-            data={item.accounts}
-            key={`account-icon-${index}`}
-          />
-        );
-      })}
-      {items.length == 0 && (
-        <center>
-          <Image src="/empty.svg" width={400} height={400} alt="Empty" className="p-8"/>
-          <p className="text-center antialiased text-gray-400 text-sm">
-            It looks like you don’t have any accounts saved yet. Why not create
-            a new one to get started?
-          </p>
-        </center>
-      )}
-    </Card>
+    <>
+      <Card className="bg-white w-full justify-start">
+        <Typography variant="p" className="text-primary font-semibold">
+          Your saved passwords
+        </Typography>
+        {items.map((item, index) => {
+          return (
+            <Websites
+              icon={item.icon}
+              name={item.siteName}
+              count={item.accounts.length}
+              length={items.length}
+              index={index}
+              data={item.accounts}
+              key={`account-icon-${index}`}
+            />
+          );
+        })}
+        {items.length == 0 && (
+          <center>
+            <Image
+              src="/empty.svg"
+              width={400}
+              height={400}
+              alt="Empty"
+              className="p-8"
+            />
+            <p className="text-center antialiased text-gray-400 text-sm">
+              It looks like you don’t have any accounts saved yet. Why not
+              create a new one to get started?
+            </p>
+          </center>
+        )}
+      </Card>
+      <AddButton />
+    </>
   );
 };
 

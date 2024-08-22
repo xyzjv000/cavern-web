@@ -1,5 +1,6 @@
 "use client";
 import Card from "@/components/Card";
+import LoadingPage from "@/components/LoadingPage";
 import { TextField, Button, InputAdornment, Typography } from "@mui/material";
 import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
@@ -51,6 +52,7 @@ function page() {
 
   return (
     <Card className="w-11/12 sm:w-96 justify-center items-center  m-auto">
+      {status === "loading" && <LoadingPage /> }
       <Image src="/cavern.svg" width={160} height={160} alt="Cavern" />
       <form
         onSubmit={handleSubmit}

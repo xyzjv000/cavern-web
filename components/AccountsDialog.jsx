@@ -50,8 +50,8 @@ export default function AccountsDialog({
       </DialogTitle>
       <DialogContent className="!px-8 !py-4">
         <TextField
-          label="Email"
-          placeholder="Email Address"
+          label="Username"
+          placeholder="Username"
           required
           className="mb-5"
           name="username"
